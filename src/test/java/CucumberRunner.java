@@ -8,6 +8,4 @@ import org.junit.runner.RunWith;
         glue = {"steps"},
         plugin = {"pretty"})
 
-public class CucumberRunner {
-
-}
+public class CucumberRunner {}

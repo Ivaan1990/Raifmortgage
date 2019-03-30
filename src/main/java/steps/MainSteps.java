@@ -16,6 +16,7 @@ public class MainSteps {
     @When("выбран пункт меню \"(.*)\"")
     public void selectMainMenu(String itemName){
         mainPage.selectMenuItem(mainPage.mainMenu, itemName);
+        mainPage.delay(3);
     }
 
     @When("выбран подпункт меню ипотека \"(.*)\"")

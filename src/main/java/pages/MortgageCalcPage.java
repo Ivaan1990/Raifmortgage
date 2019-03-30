@@ -16,6 +16,13 @@ public class MortgageCalcPage extends BasePage {
     @FindBy(xpath = "//span[contains(@class, 'checkbox-block__span')]")
     public WebElement checkBox;
 
-    @FindBy(xpath = "//ul[@aria-labelledby=\"form_program-button\"]//li")
-    public List<WebElement> mortaggePrograms;
+    @FindBy(xpath = "//*[@id='form_category']")
+    public WebElement clientStatus;
+
+    @FindBy(xpath = "//*[@id=\"form_credit_amount\"]")
+    public WebElement creditAmount;
+
+    @FindBy(xpath = "//*[@id=\"form_initial\"]")
+    public WebElement firstPayment;
+
 }

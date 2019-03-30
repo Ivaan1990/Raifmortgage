@@ -3,12 +3,14 @@ package pages;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import util.DriverManager;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public abstract class BasePage {
     WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 60);
@@ -31,4 +33,30 @@ public abstract class BasePage {
                 .executeScript("arguments[0].scrollIntoView();", DriverManager.getDriver()
                         .findElement(By.xpath(xPath)));
     }
+
+    public void delay(int time){
+        try {
+            Thread.sleep(time * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isPresent(By locator){
+        try {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+            return DriverManager.getDriver().findElement(locator).isDisplayed();
+        }catch (NoSuchElementException e){
+            return false;
+        }finally {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        }
+    }
+
+    public void fillForm(String xpath, String fill){
+        DriverManager.getDriver().findElement(By.xpath(xpath)).click();
+        DriverManager.getDriver().findElement(By.xpath(xpath)).clear();
+        DriverManager.getDriver().findElement(By.xpath(xpath)).sendKeys(fill);
+    }
+
 }
