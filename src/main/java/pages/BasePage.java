@@ -1,6 +1,8 @@
 package pages;
 
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,6 +24,11 @@ public abstract class BasePage {
                 return;
             }
         }
-        Assert.fail("Не найден пункт меню " + itemName);
+        Assert.fail("Не найден элемент коллекции " + itemName);
+    }
+    public void scrollPage(String xPath){
+        ((JavascriptExecutor)DriverManager.getDriver())
+                .executeScript("arguments[0].scrollIntoView();", DriverManager.getDriver()
+                        .findElement(By.xpath(xPath)));
     }
 }

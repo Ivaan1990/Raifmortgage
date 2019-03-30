@@ -10,6 +10,12 @@ public class MortgageCalcPage extends BasePage {
     @FindBy(xpath = "//h1[@class='e-title e-title--h2']")
     public WebElement mortgageCalcTitle;
 
-    @FindBy(xpath = "//select[@id='form_city']/option")
+    @FindBy(xpath = "//ul[@aria-labelledby=\"form_city-button\"]//li")
     public List<WebElement> regionsList;
+
+    @FindBy(xpath = "//span[contains(@class, 'checkbox-block__span')]")
+    public WebElement checkBox;
+
+    @FindBy(xpath = "//ul[@aria-labelledby=\"form_program-button\"]//li")
+    public List<WebElement> mortaggePrograms;
 }
