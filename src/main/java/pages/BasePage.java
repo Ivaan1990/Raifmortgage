@@ -1,10 +1,7 @@
 package pages;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -62,6 +59,14 @@ public abstract class BasePage {
         }finally {
             DriverManager.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
         }
+    }
+
+    public void backSpaceSymbols(WebElement element, String value) {
+        element.click();
+        for (int i = 0; i < value.length(); i++) {
+            element.sendKeys(Keys.BACK_SPACE);
+        }
+        waitRaifHelper();
     }
 
 }

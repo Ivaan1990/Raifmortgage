@@ -63,27 +63,21 @@ public class MortgageCalcSteps {
     @When("возьму в банке \"(.*)\"")
     public void inputAmount(String amount){
         mortgageCalcPage.waitRaifHelper();
-        mortgageCalcPage.creditAmount.click();
-        mortgageCalcPage.creditAmount.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.DELETE));
-        mortgageCalcPage.creditAmount.clear();
+        mortgageCalcPage.backSpaceSymbols(DriverManager.getDriver().findElement(By.xpath("//*[@id=\"form_credit_amount\"]")), amount);
         mortgageCalcPage.creditAmount.sendKeys(amount);
     }
 
     @When("первоначальный взнос \"(.*)\"")
     public void inputFirstPayment(String value){
         mortgageCalcPage.waitRaifHelper();
-        mortgageCalcPage.firstPayment.click();
-        mortgageCalcPage.creditAmount.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.DELETE));
-        mortgageCalcPage.firstPayment.clear();
+        mortgageCalcPage.backSpaceSymbols(DriverManager.getDriver().findElement(By.xpath("//*[@id=\"form_initial\"]")), value);
         mortgageCalcPage.firstPayment.sendKeys(value);
     }
 
     @When("срок кредита \"(.*)\"")
     public void inputCreditTerm(String term){
         mortgageCalcPage.waitRaifHelper();
-        mortgageCalcPage.creditTerm.click();
-        mortgageCalcPage.creditAmount.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.DELETE));
-        mortgageCalcPage.creditTerm.clear();
+        mortgageCalcPage.backSpaceSymbols(DriverManager.getDriver().findElement(By.xpath("//*[@id=\"form_period\"]")), term);
         mortgageCalcPage.creditTerm.sendKeys(term);
         mortgageCalcPage.scrollPage("//*[contains(text(),'Я являюсь')]");
     }
