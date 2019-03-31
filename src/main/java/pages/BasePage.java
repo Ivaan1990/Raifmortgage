@@ -34,9 +34,9 @@ public abstract class BasePage {
                         .findElement(By.xpath(xPath)));
     }
 
-    public void delay(int time){
+    public void delay(int seconds){
         try {
-            Thread.sleep(time * 1000);
+            Thread.sleep(seconds * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -51,12 +51,6 @@ public abstract class BasePage {
         }finally {
             DriverManager.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
         }
-    }
-
-    public void fillForm(String xpath, String fill){
-        DriverManager.getDriver().findElement(By.xpath(xpath)).click();
-        DriverManager.getDriver().findElement(By.xpath(xpath)).clear();
-        DriverManager.getDriver().findElement(By.xpath(xpath)).sendKeys(fill);
     }
 
 }

@@ -25,4 +25,24 @@ public class MortgageCalcPage extends BasePage {
     @FindBy(xpath = "//*[@id=\"form_initial\"]")
     public WebElement firstPayment;
 
+    @FindBy(xpath = "//*[@id=\"form_period\"]")
+    public WebElement creditTerm;
+
+    @FindBy(xpath = "//*[@value='Рассчитать']")
+    public WebElement calc;
+
+
+    /** Актуальные значения по параметрам предлагаемой ипотеки */
+
+    @FindBy(xpath = "//*[@class=\"monthly-payment\"]")
+    public WebElement actualMontlyPayment;
+
+    @FindBy(xpath = "//*[@class=\"b-calc-result__text--right total-payment\"]")
+    public WebElement actualTotalPay;
+
+    @FindBy(xpath = "//*[contains(@class, 'percent-sum')]")
+    public WebElement actualSumOfPaymentPercent;
+
+    @FindBy(xpath = "//*[contains(@class, 'interest-rate')]")
+    public WebElement actualInterestRate;
 }

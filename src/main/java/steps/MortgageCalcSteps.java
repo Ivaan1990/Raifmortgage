@@ -11,17 +11,15 @@ import org.openqa.selenium.support.ui.*;
 import pages.BasePage;
 import pages.MortgageCalcPage;
 import util.DriverManager;
-
 import java.util.concurrent.TimeUnit;
-
 import static pages.BasePage.isPresent;
+
 
 public class MortgageCalcSteps {
 
     MortgageCalcPage mortgageCalcPage = new MortgageCalcPage();
     WebDriver driver = DriverManager.getDriver();
     WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 30);
-
 
     @Then("проверить, что на странице есть заголовок Ипотечный калькулятор")
     public void ckeckTitle(){
@@ -42,8 +40,7 @@ public class MortgageCalcSteps {
 
     @When("вид ипотечной программы \"(.*)\"")
     public void selectMortgageProgram(String program){
-        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
-                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+        waitRaifHelper();
         wait.until(ExpectedConditions.elementToBeClickable(
                 DriverManager.getDriver().findElement(By.xpath("//*[contains(text(),'Вид ипотечной программы')]/../..")))).click();
         wait.until(ExpectedConditions.visibilityOf(
@@ -52,8 +49,7 @@ public class MortgageCalcSteps {
 
     @When("кем является клиент \"(.*)\"")
     public void clientStatus(String status){
-        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
-                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+        waitRaifHelper();
         wait.until(ExpectedConditions.elementToBeClickable(
                 DriverManager.getDriver().findElement(By.xpath("//*[contains(text(),'Я являюсь')]/..")))).click();
         wait.until(ExpectedConditions.visibilityOf(
@@ -62,8 +58,7 @@ public class MortgageCalcSteps {
 
     @When("форма подтверждения доходов \"(.*)\"")
     public void formType(String type){
-        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
-                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+        waitRaifHelper();
         wait.until(ExpectedConditions.elementToBeClickable(
                 DriverManager.getDriver().findElement(By.xpath("//*[contains(text(),'Уровень')]/..")))).click();
         wait.until(ExpectedConditions.visibilityOf(
@@ -72,12 +67,10 @@ public class MortgageCalcSteps {
 
     @When("возьму в банке \"(.*)\"")
     public void inputAmount(String amount){
-        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
-                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+        waitRaifHelper();
         mortgageCalcPage.creditAmount.click();
         mortgageCalcPage.creditAmount.clear();
         mortgageCalcPage.creditAmount.sendKeys(amount);
-        amount = null;
     }
 
     @When("первоначальный взнос \"(.*)\"")
@@ -85,7 +78,69 @@ public class MortgageCalcSteps {
         mortgageCalcPage.firstPayment.click();
         mortgageCalcPage.firstPayment.clear();
         mortgageCalcPage.firstPayment.sendKeys(value);
-
     }
 
+    @When("срок кредита \"(.*)\"")
+    public void inputCreditTerm(String term){
+        mortgageCalcPage.creditTerm.click();
+        mortgageCalcPage.creditTerm.clear();
+        mortgageCalcPage.creditTerm.sendKeys(term);
+        mortgageCalcPage.scrollPage("//*[contains(text(),'Я являюсь')]");
+    }
+
+    @Then("нажать на Рассчитать")
+    public void pushCalculate(){
+        mortgageCalcPage.calc.click();
+    }
+
+    /**
+     * @see #correct(String)
+     */
+    @Then("проверить значения Ежемесячный платеж, Общая сумма выплат, Cумма выплат по процентам, Процентная ставка")
+    public void checkTheFields(){
+
+        String expectedMontlyPayment = "40656.67";
+        String totalSumPayment = "4838438.93";
+        String sumOfPaymentPercent = "1838438.93";
+        String interestRate = "10.49";
+
+        waitRaifHelper();
+
+        Assert.assertEquals("Сумма ежемесячного платежа не совпадает с требуемой ",
+                expectedMontlyPayment, correct(mortgageCalcPage.actualMontlyPayment.getText()));
+
+        Assert.assertEquals("Общая сумма выплат не совпадает с требуемой",
+                totalSumPayment, correct(mortgageCalcPage.actualTotalPay.getText()));
+
+        Assert.assertEquals("Cумма выплат по процентам не совпадает с требуемой",
+                sumOfPaymentPercent, correct(mortgageCalcPage.actualSumOfPaymentPercent.getText()));
+
+        Assert.assertEquals("Процентная ставка не совпадает с требуемой",
+                interestRate, correct(mortgageCalcPage.actualInterestRate.getText()));
+    }
+
+    /**
+     *
+     * @param line строка в которой хотим оставить только цифры и точку
+     * @return красивая цифра
+     */
+    public String correct(String line){
+        char[] a = line.toCharArray();
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < a.length - 1; i++){
+            if(Character.isDigit(a[i]) || a[i] == '.'){
+                builder.append(a[i]);
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Метож ожидания отработки загрузки параметров,
+     * без него будем падать
+     */
+    public void waitRaifHelper(){
+        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
+                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+    }
 }
