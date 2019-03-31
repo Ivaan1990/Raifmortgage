@@ -3,10 +3,7 @@ package steps;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import pages.BasePage;
 import pages.MortgageCalcPage;
@@ -67,6 +64,7 @@ public class MortgageCalcSteps {
     public void inputAmount(String amount){
         mortgageCalcPage.waitRaifHelper();
         mortgageCalcPage.creditAmount.click();
+        mortgageCalcPage.creditAmount.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.DELETE));
         mortgageCalcPage.creditAmount.clear();
         mortgageCalcPage.creditAmount.sendKeys(amount);
     }
@@ -75,6 +73,7 @@ public class MortgageCalcSteps {
     public void inputFirstPayment(String value){
         mortgageCalcPage.waitRaifHelper();
         mortgageCalcPage.firstPayment.click();
+        mortgageCalcPage.creditAmount.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.DELETE));
         mortgageCalcPage.firstPayment.clear();
         mortgageCalcPage.firstPayment.sendKeys(value);
     }
@@ -83,6 +82,7 @@ public class MortgageCalcSteps {
     public void inputCreditTerm(String term){
         mortgageCalcPage.waitRaifHelper();
         mortgageCalcPage.creditTerm.click();
+        mortgageCalcPage.creditAmount.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.DELETE));
         mortgageCalcPage.creditTerm.clear();
         mortgageCalcPage.creditTerm.sendKeys(term);
         mortgageCalcPage.scrollPage("//*[contains(text(),'Я являюсь')]");
