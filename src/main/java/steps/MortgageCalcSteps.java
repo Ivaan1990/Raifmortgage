@@ -12,14 +12,12 @@ import pages.BasePage;
 import pages.MortgageCalcPage;
 import util.DriverManager;
 import java.util.concurrent.TimeUnit;
-import static pages.BasePage.isPresent;
-
 
 public class MortgageCalcSteps {
 
     MortgageCalcPage mortgageCalcPage = new MortgageCalcPage();
     WebDriver driver = DriverManager.getDriver();
-    WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 30);
+    static WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 30);
 
     @Then("проверить, что на странице есть заголовок Ипотечный калькулятор")
     public void ckeckTitle(){
@@ -75,6 +73,7 @@ public class MortgageCalcSteps {
 
     @When("первоначальный взнос \"(.*)\"")
     public void inputFirstPayment(String value){
+        waitRaifHelper();
         mortgageCalcPage.firstPayment.click();
         mortgageCalcPage.firstPayment.clear();
         mortgageCalcPage.firstPayment.sendKeys(value);
@@ -82,6 +81,7 @@ public class MortgageCalcSteps {
 
     @When("срок кредита \"(.*)\"")
     public void inputCreditTerm(String term){
+        waitRaifHelper();
         mortgageCalcPage.creditTerm.click();
         mortgageCalcPage.creditTerm.clear();
         mortgageCalcPage.creditTerm.sendKeys(term);
@@ -140,7 +140,19 @@ public class MortgageCalcSteps {
      * без него будем падать
      */
     public void waitRaifHelper(){
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 30);
         wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
                 !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+    }
+
+    public boolean isPresent(By locator){
+        try {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+            return DriverManager.getDriver().findElement(locator).isDisplayed();
+        }catch (NoSuchElementException e){
+            return false;
+        }finally {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        }
     }
 }

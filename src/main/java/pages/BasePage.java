@@ -42,15 +42,6 @@ public abstract class BasePage {
         }
     }
 
-    public static boolean isPresent(By locator){
-        try {
-            DriverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-            return DriverManager.getDriver().findElement(locator).isDisplayed();
-        }catch (NoSuchElementException e){
-            return false;
-        }finally {
-            DriverManager.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-        }
-    }
+
 
 }
