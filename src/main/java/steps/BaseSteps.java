@@ -23,6 +23,6 @@ public class BaseSteps {
 
     @After
     public void afterScenario(){
-        //DriverManager.quitDriver();
+        DriverManager.quitDriver();
     }
 }
