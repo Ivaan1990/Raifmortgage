@@ -6,6 +6,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import util.DriverManager;
 
@@ -42,6 +43,25 @@ public abstract class BasePage {
         }
     }
 
+    /**
+     * Метод ожидания отработки загрузки параметров,
+     * без него будем падать
+     */
+    public void waitRaifHelper(){
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 30);
+        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
+                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+    }
 
+    public boolean isPresent(By locator){
+        try {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+            return DriverManager.getDriver().findElement(locator).isDisplayed();
+        }catch (NoSuchElementException e){
+            return false;
+        }finally {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        }
+    }
 
 }

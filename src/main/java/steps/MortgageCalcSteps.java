@@ -38,7 +38,7 @@ public class MortgageCalcSteps {
 
     @When("вид ипотечной программы \"(.*)\"")
     public void selectMortgageProgram(String program){
-        waitRaifHelper();
+        mortgageCalcPage.waitRaifHelper();
         wait.until(ExpectedConditions.elementToBeClickable(
                 DriverManager.getDriver().findElement(By.xpath("//*[contains(text(),'Вид ипотечной программы')]/../..")))).click();
         wait.until(ExpectedConditions.visibilityOf(
@@ -47,7 +47,7 @@ public class MortgageCalcSteps {
 
     @When("кем является клиент \"(.*)\"")
     public void clientStatus(String status){
-        waitRaifHelper();
+        mortgageCalcPage.waitRaifHelper();
         wait.until(ExpectedConditions.elementToBeClickable(
                 DriverManager.getDriver().findElement(By.xpath("//*[contains(text(),'Я являюсь')]/..")))).click();
         wait.until(ExpectedConditions.visibilityOf(
@@ -56,7 +56,7 @@ public class MortgageCalcSteps {
 
     @When("форма подтверждения доходов \"(.*)\"")
     public void formType(String type){
-        waitRaifHelper();
+        mortgageCalcPage.waitRaifHelper();
         wait.until(ExpectedConditions.elementToBeClickable(
                 DriverManager.getDriver().findElement(By.xpath("//*[contains(text(),'Уровень')]/..")))).click();
         wait.until(ExpectedConditions.visibilityOf(
@@ -65,7 +65,7 @@ public class MortgageCalcSteps {
 
     @When("возьму в банке \"(.*)\"")
     public void inputAmount(String amount){
-        waitRaifHelper();
+        mortgageCalcPage.waitRaifHelper();
         mortgageCalcPage.creditAmount.click();
         mortgageCalcPage.creditAmount.clear();
         mortgageCalcPage.creditAmount.sendKeys(amount);
@@ -73,7 +73,7 @@ public class MortgageCalcSteps {
 
     @When("первоначальный взнос \"(.*)\"")
     public void inputFirstPayment(String value){
-        waitRaifHelper();
+        mortgageCalcPage.waitRaifHelper();
         mortgageCalcPage.firstPayment.click();
         mortgageCalcPage.firstPayment.clear();
         mortgageCalcPage.firstPayment.sendKeys(value);
@@ -81,7 +81,7 @@ public class MortgageCalcSteps {
 
     @When("срок кредита \"(.*)\"")
     public void inputCreditTerm(String term){
-        waitRaifHelper();
+        mortgageCalcPage.waitRaifHelper();
         mortgageCalcPage.creditTerm.click();
         mortgageCalcPage.creditTerm.clear();
         mortgageCalcPage.creditTerm.sendKeys(term);
@@ -104,7 +104,7 @@ public class MortgageCalcSteps {
         String sumOfPaymentPercent = "1838438.93";
         String interestRate = "10.49";
 
-        waitRaifHelper();
+        mortgageCalcPage.waitRaifHelper();
 
         Assert.assertEquals("Сумма ежемесячного платежа не совпадает с требуемой ",
                 expectedMontlyPayment, correct(mortgageCalcPage.actualMontlyPayment.getText()));
@@ -135,24 +135,5 @@ public class MortgageCalcSteps {
         return builder.toString();
     }
 
-    /**
-     * Метод ожидания отработки загрузки параметров,
-     * без него будем падать
-     */
-    public void waitRaifHelper(){
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 30);
-        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
-                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
-    }
 
-    public boolean isPresent(By locator){
-        try {
-            DriverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-            return DriverManager.getDriver().findElement(locator).isDisplayed();
-        }catch (NoSuchElementException e){
-            return false;
-        }finally {
-            DriverManager.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-        }
-    }
 }
