@@ -2,3 +2,4 @@
 
 
 ### Используется: Cucumber + Allure + Selenium
+## Паттерн проектирования pageObject
